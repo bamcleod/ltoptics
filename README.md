@@ -32,11 +32,12 @@ The laser_tracker type controls which module will be imported for communications
 If you have a different type of laser tracker you will need to write your own interface module, e.g. super_lt.py, modeled on the one in leica_at4xx.py
 
 ```
-Zemax_origin_in_benchcoordinates:
+Zemax_origin_in_benchcoordinates: [155.63, 1537.35, -171.1]
 ```
 These are the coordinates of the Zemax global coordinate reference surface measured in your bench coordinate system.  You'll likely need to measure this in your CAD software.
 
-```Zemax_unitvectors_in_bench_coordinates:[
+```
+Zemax_unitvectors_in_bench_coordinates:[
              [0, 0, 1],
              [0, 1, 0],
              [-1, 0, 0]]
