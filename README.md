@@ -6,9 +6,6 @@ table based on a Zemax OpticStudio prescription.
 The ltoptics package allows accurate placement of flat mirrors and spherically mounted retro-reflectors on an optical 
 table to locations specified in a Zemax OpticStudio prescription.
 
-## Description
-
-![](ltopticsgui.png)
 
 ## Getting Started
 
@@ -78,6 +75,30 @@ Aim the laser tracker at each of the SMRs and press the corresponding button in 
 Use the filename permbench.txt.  This step needs to be done only once but must be done with the laser tracker in a position where it has a sightline to all of the SMRs.
 
 In Zemax OpticStudio you must generate and save a Prescription report in the ltoptics folder.  This should be done in ascii format (the default is Unicode).
+
+## Let's get going!
+
+![](ltopticsgui.png)
+
+### Mirror positioning
+
+* The laser tracker is positioned where it can see three fixed retros as well as the
+  positioning retro and its reflection in the mirror that is being aligned.
+  With a crowded bench this may take some iteration.  The positioning retro nest is secured to the bench. 
+* Start ltoptics
+* Manually pointed the laser tracker in turn at three of the fixed bench retros 
+  and measured by pressing the corresponding button.
+* Aim the mirror measurement retro at the laser tracker and measure.
+* Rotate the measurement retro within its nest to face the mirror so it can be seen by the laser tracker in reflection off the mirror.
+* Press the "Measure mirror" button, which will cause the laser tracker to remeasure the three permanent retros, and then repeatedly measure the positioning retro.  The mirror position is computed, and the x-tilt, y-tilt, and axial positioning errors are displayed on the screen updating at roughly 1\,Hz.
+
+
+### Focal point retro positioning
+* Sometimes in the alignment process there are times where a retro sphere has to be placed in the correct location so it can be used by an interferometer.  
+  The SMR is positioned using the laser tracker in a process identical to that for positioning
+  a mirror except that the positioning retro is repeatedly measured directly,
+  rather than in reflection.  Once the SMR is positioned with the laser tracker, 
+  it is rotated in its nest so that the interferometer beam will hit the spherical surface.
 
 ## Authors
 
