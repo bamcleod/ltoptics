@@ -1,7 +1,3 @@
-** ltoptics -- Laser Tracker Optics **
-The ltoptics package allows accurate placement of flat mirrors and spherically mounted retro-reflectors on an optical 
-table based on a Zemax OpticStudio prescription.
-
 # Laser Tracker Optics
 The ltoptics package allows accurate placement of flat mirrors and spherically mounted retro-reflectors on an optical 
 table to locations specified in a Zemax OpticStudio prescription.
