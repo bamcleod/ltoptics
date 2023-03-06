@@ -1,6 +1,6 @@
 laser_tracker:
     type: leica_at4xx
-    host: 192.168.1.243
+    host: 192.168.1.230
 
 Zemax_origin_in_benchcoordinates: [155.63, 1537.35, -171.1]
 
@@ -35,3 +35,7 @@ smrs:
         layout_column: 1
         layout_row: 1
 
+redis:
+    use: yes
+    host: localhost
+    

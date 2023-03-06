@@ -335,52 +335,54 @@ def scanning(mode):
 
     if running == True:
 
-        logger.info('Measuring reflector..')
+        try:
+            logger.info('Measuring reflector..')
 
-        measured_LT = np.array(laser_tracker.measure())
-        measurement = laser_tracker.measurement
-        
-        print('Measured SMR at LTXYZ: ', measured_LT)
-        
-        # Transform into the local optic coordinate system
-        #
-        measured_bench = benchinfo.transform_LT_to_bench(measured_LT)
-        measured_zemax = benchinfo.transform_bench_to_Zemax(measured_bench)
-        measured_optic = benchinfo.transform_Zemax_to_optic(measured_zemax)
+            measured_LT = np.array(laser_tracker.measure())
+            measurement = laser_tracker.measurement
 
-        nominal_bench = benchinfo.transform_LT_to_bench(nominal)
-        nominal_zemax = benchinfo.transform_bench_to_Zemax(nominal_bench)
-        nominal_optic = benchinfo.transform_Zemax_to_optic(nominal_zemax)
+            print('Measured SMR at LTXYZ: ', measured_LT)
 
-        diffxyz = measured_optic - nominal_optic
-        print("Measured position in bench coordsys: ", measured_bench)
-        print("Measured position in zemax coordsys: ", measured_zemax)
-        print("Measured position in optic coordsys: ", measured_optic)
-        print("Position error in optic coordsys: ", diffxyz)
+            # Transform into the local optic coordinate system
+            #
+            measured_bench = benchinfo.transform_LT_to_bench(measured_LT)
+            measured_zemax = benchinfo.transform_bench_to_Zemax(measured_bench)
+            measured_optic = benchinfo.transform_Zemax_to_optic(measured_zemax)
 
-        ltlog(retro_id = -1, mode=mode, coordsys='LT',    xyz=measured_LT, err=[measurement.dStd1, measurement.dStd2, measurement.dStd3],redis_connection=myredis)
-        ltlog(retro_id = -1, mode=mode, coordsys='bench', xyz=measured_bench,redis_connection=myredis)
-        ltlog(retro_id = -1, mode=mode, coordsys='zemax', xyz=measured_zemax, zemax_file=zemax_prescrip_fname,zemax_surf=int(surface_number.get()),redis_connection=myredis)
-        ltlog(retro_id = -1, mode=mode, coordsys='optic', xyz=measured_optic, zemax_file=zemax_prescrip_fname,zemax_surf=int(surface_number.get()),redis_connection=myredis)
+            nominal_bench = benchinfo.transform_LT_to_bench(nominal)
+            nominal_zemax = benchinfo.transform_bench_to_Zemax(nominal_bench)
+            nominal_optic = benchinfo.transform_Zemax_to_optic(nominal_zemax)
 
-        
-        if mode == 'smr':
-            label0.set( 'X: {:8.3f} mm | '.format(diffxyz[1]))
-            label1.set( 'Y: {:8.3f} mm | '.format(diffxyz[0]))
-            label2.set( 'Z: {:8.3f} mm'.format(diffxyz[2]))
-            ltlog(retro_id = -1, mode=mode, coordsys='diff' , xyz=[diffxyz[1],diffxyz[0],diffxyz[2]],redis_connection=myredis)
-        else:
-            # Angular error of mirror
-            hangle = np.degrees(diffxyz[1] / measured_optic[2] / 2) 
-            vangle = np.degrees(diffxyz[0] / measured_optic[2] / 2)
+            diffxyz = measured_optic - nominal_optic
+            print("Measured position in bench coordsys: ", measured_bench)
+            print("Measured position in zemax coordsys: ", measured_zemax)
+            print("Measured position in optic coordsys: ", measured_optic)
+            print("Position error in optic coordsys: ", diffxyz)
 
-            # Distance error at optic vertex
-            dist   = (diffxyz[2]  + (measured_optic[0] - nominal_optic[0]) / nominal_optic[2] * nominal_optic[0] + (measured_optic[1] - nominal_optic[1]) / nominal_optic[2] * nominal_optic[1]) / 2
-            label0.set( 'H: {:.5f} deg | '.format(hangle))
-            label1.set( 'V: {:.5f} deg | '.format(vangle))
-            label2.set( 'Z: {:.3f} mm'.format(dist))
-            ltlog(retro_id = -1, mode=mode, coordsys='diff' , xyz=[hangle,vangle,dist],redis_connection=myredis)
-            
+            ltlog(retro_id = -1, mode=mode, coordsys='LT',    xyz=measured_LT, err=[measurement.dStd1, measurement.dStd2, measurement.dStd3],redis_connection=myredis)
+            ltlog(retro_id = -1, mode=mode, coordsys='bench', xyz=measured_bench,redis_connection=myredis)
+            ltlog(retro_id = -1, mode=mode, coordsys='zemax', xyz=measured_zemax, zemax_file=zemax_prescrip_fname,zemax_surf=int(surface_number.get()),redis_connection=myredis)
+            ltlog(retro_id = -1, mode=mode, coordsys='optic', xyz=measured_optic, zemax_file=zemax_prescrip_fname,zemax_surf=int(surface_number.get()),redis_connection=myredis)
+
+
+            if mode == 'smr':
+                label0.set( 'X: {:8.3f} mm | '.format(diffxyz[1]))
+                label1.set( 'Y: {:8.3f} mm | '.format(diffxyz[0]))
+                label2.set( 'Z: {:8.3f} mm'.format(diffxyz[2]))
+                ltlog(retro_id = -1, mode=mode, coordsys='diff' , xyz=[diffxyz[1],diffxyz[0],diffxyz[2]],redis_connection=myredis)
+            else:
+                # Angular error of mirror
+                hangle = np.degrees(diffxyz[1] / measured_optic[2] / 2) 
+                vangle = np.degrees(diffxyz[0] / measured_optic[2] / 2)
+
+                # Distance error at optic vertex
+                dist   = (diffxyz[2]  + (measured_optic[0] - nominal_optic[0]) / nominal_optic[2] * nominal_optic[0] + (measured_optic[1] - nominal_optic[1]) / nominal_optic[2] * nominal_optic[1]) / 2
+                label0.set( 'H: {:.5f} deg | '.format(hangle))
+                label1.set( 'V: {:.5f} deg | '.format(vangle))
+                label2.set( 'Z: {:.3f} mm'.format(dist))
+                ltlog(retro_id = -1, mode=mode, coordsys='diff' , xyz=[hangle,vangle,dist],redis_connection=myredis)
+        except:
+            print('Error making measurement')
 
         tk.after(500, lambda: scanning(mode))
 
@@ -400,7 +402,9 @@ running = False  # Global Flag
 permanent_smrs = np.loadtxt("permbench.txt")
 
 #
-myredis = redis.Redis()
+myredis = None
+if config['redis']['use']:
+    myredis = redis.Redis(host=config['redis']['host'])
 
 # gui
 tk = Tk()
