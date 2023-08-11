@@ -55,7 +55,9 @@ smrs:
         layout_column: 1
         layout_row: 0
 ```
-These define the SMRs that are on your optical bench and the names and where they appear on the GUI.
+These define the SMRs that are on your optical bench and the names and where they appear on the GUI.  The final smr is the one that is used to make your measurement.
+
+If you change the number of SMRs you also must add or delete lines from two files: permbench.txt and tempbenchcoords.txt
 
 ### Executing program
 
@@ -83,8 +85,8 @@ In Zemax OpticStudio you must generate and save a Prescription report in the lto
   positioning retro and its reflection in the mirror that is being aligned.
   With a crowded bench this may take some iteration.  The positioning retro nest is secured to the bench. 
 * Start ltoptics
-* Manually pointed the laser tracker in turn at three of the fixed bench retros 
-  and measured by pressing the corresponding button.
+* Manually point the laser tracker in turn at exactly three of the fixed bench retros 
+  and measure by pressing the corresponding button.
 * Aim the mirror measurement retro at the laser tracker and measure.
 * Rotate the measurement retro within its nest to face the mirror so it can be seen by the laser tracker in reflection off the mirror.
 * Press the "Measure mirror" button, which will cause the laser tracker to remeasure the three permanent retros, and then repeatedly measure the positioning retro.  The mirror position is computed, and the x-tilt, y-tilt, and axial positioning errors are displayed on the screen updating at roughly 1\,Hz.

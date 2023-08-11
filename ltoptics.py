@@ -109,23 +109,12 @@ def SVD_Rotation(cesapi_positions, trackerpilot_positions, SMRs_measured_tracker
     print('SMRs_measured_trackerpilot')
     print(SMRs_measured_trackerpilot)
 
-    Q = np.matrix([
-        [1., 1., 1.],
-        [1., 1., 1.],
-        [1., 1., 1.]])
-    P = np.matrix([
-        [1., 1., 1.],
-        [1., 1., 1.],
-        [1., 1., 1.]])
-
-    SMRs_measured_trackerpilot_XYZ = np.matrix([
-        [1., 1., 1.],
-        [1., 1., 1.],
-        [1., 1., 1.]
-    ])
+    Q = np.ones((3,3))
+    P = np.ones((3,3))
+    SMRs_measured_trackerpilot_XYZ = np.ones((3,3))
 
     j = 0
-    for i in [0, 1, 2, 3, 4]:
+    for i in range(len(cesapi_positions) - 1): 
         if np.any(cesapi_positions[i] != [1, 1, 1]):
             Q[j] = trackerpilot_positions[i]
             P[j] = SMRs_measured_trackerpilot[i]
@@ -214,24 +203,13 @@ def reset():
     running = False
 
     global cesapi_positions
-    cesapi_positions = np.array([
-        [1., 1., 1.],
-        [1., 1., 1.],
-        [1., 1., 1.],
-        [1., 1., 1.],
-        [1., 1., 1.],
-        [1., 1., 1.]])
+    cesapi_positions.fill(1.)
     print(cesapi_positions)
 
     global trackerpilot_positions
-    trackerpilot_positions = np.array([
-        [1., 1., 1.],
-        [1., 1., 1.],
-        [1., 1., 1.],
-        [1., 1., 1.],
-        [1., 1., 1.],
-        [1., 1., 1.]])
+    trackerpilot_positions.fill(1.)
     print(trackerpilot_positions)
+
     np.savetxt("tempbenchcoords.txt", cesapi_positions)
 
 #  adjusts mirror or SMR
@@ -400,6 +378,8 @@ running = False  # Global Flag
 # permanent SMR measurements for SVD Rotation
 #
 permanent_smrs = np.loadtxt("permbench.txt")
+if len(permanent_smrs) != len(config['smrs']):
+    raise Exception("Configuration mismatch: %s contains %d SMRs but permbench.txt has %d lines" % ( config_file, len(config['smrs']), len(permanent_smrs)))
 
 #
 myredis = None
@@ -420,6 +400,8 @@ surface_number = StringVar()
 
 # arrays for retro coordinates
 cesapi_positions = np.loadtxt("tempbenchcoords.txt")
+if len(cesapi_positions) != len(config['smrs']):
+    raise Exception("Configuration mismatch: %s contains %d SMRs but tempbenchcoords.txt has %d lines" % ( config_file, len(config['smrs']), len(cesapi_positions)))
 
 trackerpilot_positions = np.loadtxt("tempbenchcoords.txt")
 
