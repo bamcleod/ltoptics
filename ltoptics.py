@@ -109,9 +109,9 @@ def SVD_Rotation(cesapi_positions, trackerpilot_positions, SMRs_measured_tracker
     print('SMRs_measured_trackerpilot')
     print(SMRs_measured_trackerpilot)
 
-    Q = np.ones((3,3))
-    P = np.ones((3,3))
-    SMRs_measured_trackerpilot_XYZ = np.ones((3,3))
+    Q = np.matrix(np.ones((3,3)))
+    P = np.matrix(np.ones((3,3)))
+    SMRs_measured_trackerpilot_XYZ = np.matrix(np.ones((3,3)))
 
     j = 0
     for i in range(len(cesapi_positions) - 1): 
